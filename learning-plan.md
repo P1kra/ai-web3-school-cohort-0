@@ -1,42 +1,134 @@
-# 个人学习计划
+# Week 1 学习规划（2026-05-18 ~ 05-23）
 
-> 更新日期：2026-05-18
+> 每天 2 小时+ | AI 新手 / Web3 熟悉 / 无代码 | 中文输出
+> 更新时间：2026-05-18
 
-## 学习路径概览
+## 总览
 
-由于 **AI 新手 + Web3 熟悉**，优先补 AI 基础，再进入交叉内容：
+| 类别 | 任务数 | 已完成 | 待完成 | 总积分 |
+|------|--------|--------|--------|--------|
+| 前置准备 | 7 | 4 | 3 | 75 |
+| AI 向 | 3 | 1 | 2 | 60 |
+| Web3 向 | 4 | 0 | 4 | 90 |
+| AI × Web3 综合 | 3 | 0 | 3 | 110 |
+| 发布 & 观察 | 2 | 0 | 2 | 50 |
+| 线上活动 | 17 | 0 | 17 | 270 |
+| **合计** | **36** | **5** | **31** | **655** |
 
-### 第一阶段：AI 基础（预计 2-3 周）
+---
 
-1. [LLM — 大语言模型](https://aiweb3.school/zh/handbook/ai/llm/)
-2. [Prompt — 提示词](https://aiweb3.school/zh/handbook/ai/prompt/)
-3. [Context — 上下文](https://aiweb3.school/zh/handbook/ai/context/)
-4. [Agent — 智能体](https://aiweb3.school/zh/handbook/ai/agent/)
-5. [MCP — 模型上下文协议](https://aiweb3.school/zh/handbook/ai/mcp/)
-6. [Vibe Coding — 氛围编程](https://aiweb3.school/zh/handbook/ai/vibe-coding/)
+## 日计划
 
-### 第二阶段：AI × Web3 Bridge（预计 2-3 周）
+### 🔴 Day 1 — 周一 5/18（已完成）
 
-1. [Chain-aware Context](https://aiweb3.school/zh/handbook/bridge/chain-aware-context/)
-2. [Web3 Tool Use](https://aiweb3.school/zh/handbook/bridge/web3-tool-use/)
-3. [Agent Workflow](https://aiweb3.school/zh/handbook/bridge/agent-workflow/)
-4. [Agent Wallet](https://aiweb3.school/zh/handbook/bridge/agent-wallet/)
-5. [Verifiable AI](https://aiweb3.school/zh/handbook/bridge/verifiable-ai/)
+- ✅ 参加开营仪式（20pts）
+- ✅ 创建 GitHub repo（10pts）
+- ✅ 工具准备（10pts）
+- ✅ Learning Agent Setup（20pts）
+- ⬜ 19:00 Co-learning（20pts）
+- ⬜ 20:00 AI 架构能力讲座（20pts）
 
-### 第三阶段：前沿探索 + 项目实战
+### 🟠 Day 2 — 周二 5/19
 
-按兴趣选择 Track：Agentic Commerce · Wallet/Permission · AI Security · Governance · Dev Tooling
+**主线：AI 基础起步**
 
-## 日常节奏
+| 时段 | 任务 | 积分 |
+|------|------|------|
+| 上午 | 📖 阅读 Handbook LLM 章节 | — |
+| 上午 | 📝 整理 AI 基础概念卡片 | 10 |
+| 下午 | 🧪 完成 PoW 提交测试 | 5 |
+| 下午 | 🐦 在 X 发布学习起点 | 10 |
+| 晚上 20:00 | 🎙️ 实时参加 Hermes 入门讲座 | 20 |
 
-- 每日 2 小时+
-- 早上/晚上各一次打卡（待确认提醒设置）
-- 每日产出 daily note
-- 遇到问题记录到 handbook-feedback/
+**AI 概念卡片模板：** 记录 LLM / Prompt / Context / Agent / MCP 5 个核心概念，每个 3 句话
 
-## 里程碑
+### 🟡 Day 3 — 周三 5/20
 
-- [ ] 完成 AI 基础全部章节
-- [ ] 完成 AI × Web3 Bridge 全部章节
-- [ ] 产出一个 AI × Web3 小原型（Hackathon 项目）
-- [ ] 提交至少 3 条 Handbook feedback
+**主线：Web3 实践 + 补齐概念**
+
+| 时段 | 任务 | 积分 |
+|------|------|------|
+| 上午 | 📝 整理 Web3 基础概念卡片 | 10 |
+| 上午 | 🦊 安装测试钱包 + 领水 | — |
+| 下午 | 💸 完成一笔测试网交易 | 20 |
+| 下午 | 📖 阅读 Handbook Smart Contract 章节 | — |
+| 晚上 17:00 | 🎙️ 实时参加 Web3 运行原理 | 20 |
+| 晚上 19:00 | 🎙️ Co-learning | 20 |
+
+**测试网交易计划：** Sepolia 测试网，MetaMask + 水龙头 → 发送 0.001 ETH 测试转账
+
+### 🟢 Day 4 — 周四 5/21
+
+**主线：AI × Web3 交叉 + 开营回放**
+
+| 时段 | 任务 | 积分 |
+|------|------|------|
+| 上午 | 📺 观看开营回放 + 3条笔记 | 10 |
+| 上午 | 🔀 画出 AI × Web3 最小交叉流程图 | 30 |
+| 下午 | 📖 阅读 Handbook Bridge 章节 | — |
+| 晚上 20:00 | 🎙️ AI 下乡计划讲座 | 20 |
+
+**流程图工具建议：** Excalidraw / Mermaid（Al辅助生成）
+
+### 🔵 Day 5 — 周五 5/22
+
+**主线：合约尝试 + 项目拆解**
+
+| 时段 | 任务 | 积分 |
+|------|------|------|
+| 上午 | ⛓️ 部署/调用最小智能合约 | 30 |
+| 上午 | 🔐 比较 EOA/智能账户/多签权限 | 30 |
+| 下午 | 🔍 拆解 1-2 个 AI×Web3 项目 | 30 |
+| 晚上 19:00 | 🎙️ Z.AI 讲座 | 20 |
+| 晚上 20:00 | 🎙️ Week 1 例会 | 20 |
+
+**合约计划：** Remix IDE + Sepolia，部署 HelloWorld 合约并调用
+**项目拆解方向：** 可选 Cobo Agentic Wallet / Phala / LI.FI
+
+### 🟣 Day 6 — 周六 5/23
+
+**主线：收尾 + 综合产出**
+
+| 时段 | 任务 | 积分 |
+|------|------|------|
+| 上午 09:30 | 🎙️ Open Agentic Economy | 20 |
+| 上午 10:30 | 🎙️ Co-learning | 20 |
+| 下午 | 🧩 设计受限 Web3 助手 workflow | 40 |
+| 下午 | 🎨 完成 AI 可交互学习产物 | 30 |
+| 下午 | 📢 发布 AI × Web3 学习总结 | 20 |
+| 晚上 | 📦 提交 Week 1 PoW Pack | 40 |
+
+---
+
+## 回放任务（可穿插完成）
+
+| 活动 | 回放任务 | 积分 |
+|------|----------|------|
+| 5/18 AI 架构能力 | 观看回放 | 10 |
+| 5/19 Hermes 入门 | 观看回放 | 10 |
+| 5/20 Web3 运行原理 | 观看回放 | 10 |
+| 5/21 AI 下乡计划 | 观看回放 | 10 |
+| 5/22 Z.AI | 观看回放 | 10 |
+| 5/22 Week 1 例会 | 观看回放 | 10 |
+| 5/23 Open Agentic Economy | 观看回放 | 10 |
+| 5/18 开营仪式 | 观看回放+3条笔记 | 10 |
+
+---
+
+## 优先级策略
+
+| 优先级 | 任务 | 理由 |
+|--------|------|------|
+| 🔴 P0 | 每日实时讲座 + Co-learning | 时间敏感，过期只能拿回放分 |
+| 🟠 P1 | 概念卡片 + 流程图 + 项目拆解 | 无代码友好，可 AI 辅助 |
+| 🟡 P2 | 测试网交易 + 智能合约 | 需要动手，可能卡壳 |
+| 🟢 P3 | PoW Pack + 学习总结 | 依赖其他任务产出汇总 |
+| ⚪ P4 | 回放任务 | 补分项，时间灵活 |
+
+---
+
+## 风险提示
+
+- ⚠️ 无代码背景 → 合约部署可能需 Remix GUI 路径 + AI 辅助
+- ⚠️ X 发布需手动操作，Agent 只能生成草稿
+- ⚠️ PoW Pack 是汇总任务，最后一天集中提交
