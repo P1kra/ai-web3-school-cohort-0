@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI × Web3 Agent 钱包模拟器 — 交互式学习工件</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: #0d1117; color: #c9d1d9; min-height: 100vh; }
+  .container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
+  h1 { font-size: 1.8rem; margin-bottom: 0.3rem; color: #58a6ff; }
+  .subtitle { color: #8b949e; margin-bottom: 2rem; font-size: 0.95rem; }
+  .simulator { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .step-indicator { display: flex; gap: 0.5rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .step { padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; background: #21262d; color: #8b949e; border: 1px solid #30363d; }
+  .step.active { background: #1f6feb22; color: #58a6ff; border-color: #1f6feb; }
+  .step.done { background: #23863622; color: #3fb950; border-color: #238636; }
+  .chat-area { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 1rem; min-height: 200px; max-height: 400px; overflow-y: auto; margin-bottom: 1rem; }
+  .msg { margin-bottom: 0.8rem; padding: 0.6rem 1rem; border-radius: 8px; max-width: 90%; animation: fadeIn 0.3s ease; }
+  .msg.user { background: #1f6feb; color: #fff; margin-left: auto; }
+  .msg.agent { background: #21262d; border: 1px solid #30363d; }
+  .msg.system { background: #da363322; border: 1px solid #da3633; font-size: 0.85rem; text-align: center; max-width: 100%; }
+  .msg .label { font-size: 0.7rem; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.2rem; }
+  .input-row { display: flex; gap: 0.5rem; }
+  .input-row input { flex:1; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 0.7rem 1rem; color: #c9d1d9; font-size: 1rem; }
+  .input-row input:focus { outline: none; border-color: #58a6ff; }
+  .input-row button { background: #238636; color: #fff; border: none; border-radius: 8px; padding: 0.7rem 1.5rem; font-size: 1rem; cursor: pointer; white-space: nowrap; }
+  .input-row button:hover { background: #2ea043; }
+  .input-row button:disabled { background: #21262d; color: #484f58; cursor: not-allowed; }
+  .confirm-bar { display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.8rem; }
+  .confirm-bar button { padding: 0.5rem 1.5rem; border-radius: 8px; font-size: 0.9rem; cursor: pointer; border: 1px solid #30363d; }
+  .btn-approve { background: #238636; color: #fff; border-color: #238636; }
+  .btn-approve:hover { background: #2ea043; }
+  .btn-reject { background: #da3633; color: #fff; border-color: #da3633; }
+  .btn-reject:hover { background: #f85149; }
+  .workflow-viz { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .workflow-viz h3 { color: #58a6ff; margin-bottom: 1rem; }
+  .pipeline { display: flex; align-items: center; flex-wrap: wrap; gap: 0.3rem; justify-content: center; }
+  .pipe-node { padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.75rem; text-align: center; border: 1px solid #30363d; min-width: 80px; }
+  .pipe-node.ai { background: #1f6feb22; border-color: #1f6feb; color: #58a6ff; }
+  .pipe-node.human { background: #d2992222; border-color: #d29922; color: #e3b341; }
+  .pipe-node.chain { background: #23863622; border-color: #238636; color: #3fb950; }
+  .pipe-arrow { color: #484f58; font-size: 1rem; }
+  .info-box { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 1.5rem; }
+  .info-box h3 { color: #58a6ff; margin-bottom: 0.8rem; }
+  .info-box ul { list-style: none; padding: 0; }
+  .info-box li { padding: 0.3rem 0; font-size: 0.9rem; }
+  .info-box li::before { content: "▸ "; color: #58a6ff; }
+  .scenario-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .scenario-btns button { padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.85rem; cursor: pointer; background: #21262d; color: #8b949e; border: 1px solid #30363d; }
+  .scenario-btns button:hover { background: #30363d; color: #c9d1d9; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+  .footer-note { text-align: center; color: #484f58; font-size: 0.75rem; margin-top: 2rem; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🤖 AI × Web3 Agent 钱包模拟器</h1>
+  <p class="subtitle">交互式学习工件 — 理解 AI Agent 与 Web3 钱包协作的边界与确认点</p>
+
+  <div class="simulator">
+    <div class="step-indicator" id="steps">
+      <span class="step active" data-step="1">1️⃣ 用户输入</span>
+      <span class="step" data-step="2">2️⃣ Agent 分析</span>
+      <span class="step" data-step="3">3️⃣ 生成交易</span>
+      <span class="step" data-step="4">4️⃣ 人工确认</span>
+      <span class="step" data-step="5">5️⃣ 链上执行</span>
+      <span class="step" data-step="6">6️⃣ 验证结果</span>
+    </div>
+
+    <div class="scenario-btns">
+      <button onclick="loadScenario('nft')">🎨 买 NFT</button>
+      <button onclick="loadScenario('send')">💸 发代币</button>
+      <button onclick="loadScenario('swap')">🔄 DEX 兑换</button>
+      <button onclick="loadScenario('custom')">✏️ 自定义</button>
+    </div>
+
+    <div class="chat-area" id="chat"></div>
+    <div class="input-row" id="inputRow" style="display:none">
+      <input type="text" id="userInput" placeholder="输入你想让 Agent 做的事..." onkeydown="if(event.key==='Enter')sendMessage()">
+      <button id="sendBtn" onclick="sendMessage()">发送</button>
+    </div>
+    <div class="confirm-bar" id="confirmBar" style="display:none">
+      <button class="btn-approve" onclick="handleConfirm(true)">✅ 确认 & 签名</button>
+      <button class="btn-reject" onclick="handleConfirm(false)">❌ 拒绝</button>
+    </div>
+  </div>
+
+  <div class="workflow-viz">
+    <h3>🔗 当前工作流</h3>
+    <div class="pipeline">
+      <span class="pipe-node human">用户请求</span><span class="pipe-arrow">→</span>
+      <span class="pipe-node ai">Agent 解析</span><span class="pipe-arrow">→</span>
+      <span class="pipe-node ai">构建交易</span><span class="pipe-arrow">→</span>
+      <span class="pipe-node human">⚠️ 人工确认</span><span class="pipe-arrow">→</span>
+      <span class="pipe-node chain">钱包签名</span><span class="pipe-arrow">→</span>
+      <span class="pipe-node chain">链上执行</span><span class="pipe-arrow">→</span>
+      <span class="pipe-node ai">验证结果</span>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h3>📖 这个工件教你什么</h3>
+    <ul>
+      <li><strong>Agent 能做什么：</strong>解析意图、查询链上数据、构造交易参数、验证结果</li>
+      <li><strong>Agent 不能做什么：</strong>自动签名、自动授权转账、绕过人工确认操作资金</li>
+      <li><strong>人工确认点（Human-in-the-loop）：</strong>每次涉及资金变动、合约写入、授权时，必须由人类确认并签名</li>
+      <li><strong>风险边界：</strong>Agent 是"建议者"而非"执行者"，钱包签名权始终在人类手中</li>
+    </ul>
+  </div>
+  <p class="footer-note">AI × Web3 School | Week 1 交互式学习工件 | 皮卡 (P1kra)</p>
+</div>
+
+<script>
+let currentStep = 1;
+let currentScenario = null;
+let pendingAction = null;
+
+const scenarios = {
+  nft: {
+    title: '买 NFT',
+    prompt: '帮我在 OpenSea 上买一个 BAYC NFT，预算 0.5 ETH',
+    response: '收到！购买 NFT 涉及：① 查询 BAYC 地板价 → ② 检查钱包余额 → ③ 构建 purchase 交易 → ④ <strong>需要你人工确认+签名</strong> → ⑤ 提交上链',
+    confirmMsg: '即将发送 0.5 ETH 购买 NFT。合约地址: 0xBC4C...aB12。Gas 预估: ~0.003 ETH。请确认是否签名？',
+    successMsg: '✅ 交易已提交！TxHash: 0x8f3a...c7d2。可在 Etherscan 查看状态。'
+  },
+  send: {
+    title: '发代币',
+    prompt: '给 0xAlice 转 100 USDC',
+    response: '分析中：① 验证目标地址格式 ✅ → ② 查询 USDC 合约余额 → ③ 构建 transfer 交易 → ④ <strong>需要你人工确认+签名</strong> → ⑤ 广播交易',
+    confirmMsg: '即将转账 100 USDC 到 0xAlice...8F2c。Gas 预估: ~0.002 ETH。请确认是否签名？',
+    successMsg: '✅ 转账已提交！TxHash: 0x3b7d...a91e。区块确认中...'
+  },
+  swap: {
+    title: 'DEX 兑换',
+    prompt: '帮我把 1 ETH 换成 USDC',
+    response: '处理中：① 查询 Uniswap 最优路径 → ② 滑点保护设 0.5% → ③ 构建 swap 交易 → ④ <strong>需要你人工确认+签名+授权</strong> → ⑤ 执行兑换',
+    confirmMsg: '即将用 1 ETH 兑换约 3,420 USDC（滑点 0.5%）。需先授权 USDC 合约。请确认？',
+    successMsg: '✅ 兑换完成！获得 3,418 USDC。TxHash: 0x5c1f...e23a。'
+  },
+  custom: {
+    title: '自定义',
+    prompt: '',
+    response: '',
+    confirmMsg: '请确认该操作是否继续？',
+    successMsg: '✅ 操作已提交。'
+  }
+};
+
+function addMessage(text, type) {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = 'msg ' + type;
+  const label = type === 'user' ? '🧑 你' : type === 'agent' ? '🤖 Agent' : '⚡ 系统';
+  div.innerHTML = '<span class="label">' + label + '</span><br>' + text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function updateSteps(active) {
+  const steps = document.querySelectorAll('.step');
+  steps.forEach(s => {
+    const sNum = parseInt(s.dataset.step);
+    s.classList.remove('active','done');
+    if (sNum < active) s.classList.add('done');
+    if (sNum === active) s.classList.add('active');
+  });
+}
+
+function loadScenario(key) {
+  currentScenario = key;
+  currentStep = 1;
+  document.getElementById('chat').innerHTML = '';
+  document.getElementById('confirmBar').style.display = 'none';
+  updateSteps(1);
+
+  const s = scenarios[key];
+  if (key === 'custom') {
+    document.getElementById('inputRow').style.display = 'flex';
+    addMessage('请输入你想让 AI Agent 帮你执行的 Web3 操作。例如："帮我把 0.1 ETH 转到 testnet 测试地址"', 'system');
+    return;
+  }
+  document.getElementById('inputRow').style.display = 'none';
+  document.getElementById('sendBtn').disabled = false;
+  runPresetScenario(s);
+}
+
+function runPresetScenario(s) {
+  addMessage(s.prompt, 'user');
+  currentStep = 2; updateSteps(2);
+
+  setTimeout(() => {
+    addMessage(s.response, 'agent');
+    currentStep = 3; updateSteps(3);
+  }, 800);
+
+  setTimeout(() => {
+    currentStep = 4; updateSteps(4);
+    document.getElementById('confirmBar').style.display = 'flex';
+    pendingAction = s;
+    addMessage('<strong>⚠️ 人工确认点：</strong>以下操作需要你的钱包签名，Agent 无法自动执行。<br><br>' + s.confirmMsg, 'system');
+  }, 2000);
+}
+
+function sendMessage() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+  addMessage(text, 'user');
+  input.value = '';
+
+  currentStep = 2; updateSteps(2);
+  document.getElementById('sendBtn').disabled = true;
+
+  setTimeout(() => {
+    addMessage('分析你的请求… 这涉及链上操作。我会帮你解析意图、查询数据、构建交易参数，但 <strong>签名和最终确认必须由你手动完成</strong>。请告诉我更多细节（金额、目标地址、网络等），我来构建具体交易。', 'agent');
+  }, 1000);
+
+  setTimeout(() => {
+    currentStep = 4; updateSteps(4);
+    document.getElementById('confirmBar').style.display = 'flex';
+    pendingAction = { confirmMsg: '请确认该操作：' + text, successMsg: '✅ 自定义操作已提交。' };
+    addMessage('<strong>⚠️ 人工确认点：</strong>' + text + '<br><br>Agent 已完成交易构建，等待你确认签名。', 'system');
+    document.getElementById('sendBtn').disabled = false;
+  }, 2500);
+}
+
+function handleConfirm(approved) {
+  document.getElementById('confirmBar').style.display = 'none';
+  if (approved) {
+    addMessage('✅ 已收到你的签名确认。提交交易到链上…', 'agent');
+    currentStep = 5; updateSteps(5);
+    setTimeout(() => {
+      currentStep = 6; updateSteps(6);
+      addMessage(pendingAction ? pendingAction.successMsg : '✅ 操作完成。', 'agent');
+    }, 1200);
+  } else {
+    addMessage('❌ 你拒绝了该操作。Agent 不会在未确认的情况下执行任何链上操作。这体现了"受限 Agent"的安全设计原则。', 'agent');
+    updateSteps(1);
+    setTimeout(() => {
+      addMessage('如需尝试其他操作，请选择场景或输入新指令。', 'system');
+    }, 500);
+  }
+}
+
+// 初始化
+addMessage('👋 你好！我是 AI × Web3 Learning Agent。<br><br>选择上方场景或输入你想让我帮你执行的操作。我会展示每一步 AI 能做什么、<strong>哪些步骤必须由你人工确认</strong>。<br><br>记住：Agent 可以分析、建议、构建交易，但永远不能绕过你的签名执行链上操作。', 'system');
+</script>
+</body>
+</html>
